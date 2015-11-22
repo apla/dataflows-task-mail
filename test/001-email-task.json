@@ -41,13 +41,12 @@
 
 		"sharklasers-hardcoded": {
 			"expect": "ok",
-			"skip": true,
 			"tasks": [{
 				"task": "mail",
 				"transport": {
 					"plugin": "nodemailer-mandrill-transport",
 					"config": {
-						"auth": {"apiKey": "kNjbd7IINJy5bEMf19sf2A"}
+						"auth": {"apiKey": "{$apiKeys.mandrill}"}
 					}
 				},
 				"x-transport": {
@@ -67,13 +66,12 @@
 		},
 		"sharklasers-template": {
 			"expect": "ok",
-			"skip": true,
 			"tasks": [{
 				"task": "mail",
 				"transport": {
 					"plugin": "nodemailer-mandrill-transport",
 					"config": {
-						"auth": {"apiKey": "kNjbd7IINJy5bEMf19sf2A"}
+						"auth": {"apiKey": "{$apiKeys.mandrill}"}
 					}
 				},
 				"fields": {

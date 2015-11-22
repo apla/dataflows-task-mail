@@ -1,6 +1,6 @@
 {
   "name": "dataflows-task-mail",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "email task for dataflows",
   "main": "index.js",
   "repository": {

@@ -12,7 +12,7 @@ describe ("002-task-alone", function () {
 			transport: {
 				plugin: "nodemailer-mandrill-transport",
 				config: {
-					auth: {apiKey: "kNjbd7IINJy5bEMf19sf2A"}
+					auth: {apiKey: process.env.MANDRILL_API_KEY}
 				}
 			},
 			fields: {

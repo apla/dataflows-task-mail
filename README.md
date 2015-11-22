@@ -1,6 +1,11 @@
 # dataflows-task-mail
 email task for dataflows
 
+[![build](https://travis-ci.org/apla/dataflows-task-mail.svg)](https://travis-ci.org/apla/dataflows-task-mail)
+[![NPM Version](http://img.shields.io/npm/v/dataflows-task-mail.svg?style=flat)](https://www.npmjs.org/package/dataflows-task-mail)
+[![codecov.io](https://codecov.io/github/apla/dataflows-task-mail/coverage.svg?branch=master)](https://codecov.io/github/apla/dataflows-task-mail?branch=master)
+
+
 Batch sending of emails
  - supports templates
  - doesn't support guaranteed delivery of emails

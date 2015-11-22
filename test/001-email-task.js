@@ -54,7 +54,11 @@ var descriptor = {
 	}
 };
 
-describe (baseName + " mail", testCommon.runTests.bind (descriptor, testData, {}, verbose));
+describe (baseName + " mail", testCommon.runTests.bind (descriptor, testData, {
+	apiKeys: {
+		mandrill: process.env.MANDRILL_API_KEY
+	}
+}, verbose));
 
 return;
 
