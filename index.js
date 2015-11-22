@@ -128,6 +128,39 @@ mailTask.prototype.run = function (args) {
 
 		email.vars = vars;
 
+		/* RFC 2606
+
+		…
+
+		To safely satisfy these needs, four domain names are reserved as
+		listed and described below.
+
+			.test
+			.example
+			.invalid
+			.localhost
+
+		…
+
+		The Internet Assigned Numbers Authority (IANA) also currently has the
+		following second level domain names reserved which can be used as
+		examples.
+
+			example.com
+			example.net
+			example.org
+		*/
+		if (email.to.match (/(?:\@example\.(?:com|net|org)|\.(?:test|example|invalid|localhost))$/)) {
+
+			sentCount ++;
+
+			if (sentCount === emails.length) {
+				this.completed ();
+			}
+
+			return;
+		}
+
 		this.transporter.sendMail (email, function (error, response) {
 
 			// console.log (error, response);
