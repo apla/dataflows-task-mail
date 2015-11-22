@@ -90,12 +90,13 @@ var mailTask = module.exports = function (config) {
 
 util.inherits (mailTask, task);
 
-mailTask.prototype.run = function () {
+mailTask.prototype.run = function (args) {
 
 	var
-		fields     = this.fields,
-		recipients = this.recipients,
-		vars       = this.vars,
+		args       = args || this,
+		fields     = args.fields,
+		recipients = args.recipients,
+		vars       = args.vars,
 		emails     = [];
 
 	if (!recipients || recipients.length === 0) {
@@ -114,7 +115,7 @@ mailTask.prototype.run = function () {
 		}
 	}
 
-	var transport = this.resolveTransport (this.transport);
+	var transport = this.resolveTransport (args.transport);
 	if (!transport)
 		return;
 
@@ -125,14 +126,16 @@ mailTask.prototype.run = function () {
 
 	emails.forEach (function (email, idx) {
 
-		email.vars = this.vars;
+		email.vars = vars;
 
 		this.transporter.sendMail (email, function (error, response) {
+
+			// console.log (error, response);
 
 			if (error)
 				return this.failed (error);
 
-			this.emit ('log', 'OK: Email sent to ' + email.to);
+			this.emit ('log', 'Email sent to ' + email.to);
 
 			sentCount ++;
 
