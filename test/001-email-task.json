@@ -41,6 +41,7 @@
 
 		"sharklasers-hardcoded": {
 			"expect": "ok",
+			"skip": true,
 			"tasks": [{
 				"task": "mail",
 				"transport": {
@@ -66,9 +67,8 @@
 		},
 		"sharklasers-template": {
 			"expect": "ok",
-			"only": true,
+			"skip": true,
 			"tasks": [{
-
 				"task": "mail",
 				"transport": {
 					"plugin": "nodemailer-mandrill-transport",

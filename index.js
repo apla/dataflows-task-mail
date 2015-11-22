@@ -129,8 +129,6 @@ mailTask.prototype.run = function () {
 
 		this.transporter.sendMail (email, function (error, response) {
 
-			console.log ('!!!!!!!!!!!!', error, response);
-
 			if (error)
 				return this.failed (error);
 
@@ -237,8 +235,6 @@ mailTask.prototype.render = function (mail, done) {
 		return done ("mail data is undefined, WTF???");
 	}
 
-	console.log (mail);
-
 	// text/html hardcoded in configuration
 	if (mail.data.html || mail.data.text) {
 		console.error ('email contents hardcoded in configuration');
@@ -254,11 +250,6 @@ mailTask.prototype.render = function (mail, done) {
 	if (mail.data.template.match (/^\.*\//)) {
 		templatePath = path.resolve (mail.data.template);
 	}
-
-	//console.log (mail.data.vars);
-
-	//done (templatePath);
-	//return;
 
 	var emailTemplate = new EmailTemplate (templatePath);
 	emailTemplate.render (mail.data.vars, function (err, result) {
