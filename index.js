@@ -170,9 +170,18 @@ mailTask.prototype.run = function (args) {
 
 		*/
 
-		// TODO: check for unicode alphanumeric like IDNA without Punycode
-		if (email.to.match (/\@\w[\w\.]+(?:invalid|localhost)$/)) {
+		if (email.to.constructor !== Array) email.to = [email.to];
 
+		email.to.forEach (function (recipient) {
+			// TODO: check for unicode alphanumeric like IDNA without Punycode
+			if (recipient.match (/\@\w[\w\.]+(?:invalid|localhost)$/)) {
+				return false;
+			}
+			return true;
+		});
+
+		// only invalid recipients, skip email sending
+		if (email.to.length === 0) {
 			sentCount ++;
 
 			if (sentCount === emails.length) {
@@ -311,7 +320,7 @@ mailTask.prototype.render = function (mail, done) {
 	var emailTemplate = new EmailTemplate (templatePath);
 	emailTemplate.render (mail.data.vars, function (err, result) {
 
-		console.log (err, result);
+		// console.log (err, result);
 
 		if (err) return done (err);
 
