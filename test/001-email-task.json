@@ -1,0 +1,227 @@
+{
+	"mail": {
+		"transports": {
+			"smtp-local": {
+				"host": "127.0.0.1",
+				"port": 50425,
+				"auth": {
+					"user": "testuser",
+					"pass": "testpass"
+				},
+				"ignoreTLS": true
+			}
+		}
+	},
+	"templates": {
+		"task": {
+			"jsonParseAndMerge": {
+				"$origin":    "{$global.JSON}",
+				"$function":  "parse",
+				"$mergeWith": "result"
+			},
+			"jsonParseAndSet": {
+				"$origin":    "{$global.JSON}",
+				"$function":  "parse",
+				"$set":       "result"
+			},
+			"indexEqItem": {
+				"$function": "throwUnlessEqual",
+				"$args": [
+					"[*every.index]",
+					"[*every.item]"
+				]
+			},
+			"testHttpResource": {
+				"$class":"urlData",
+				"$method": "toBuffer"
+			}
+		}
+	},
+	"tests": {
+
+		"sharklasers-hardcoded": {
+			"expect": "ok",
+			"tasks": [{
+				"task": "mail",
+				"transport": {
+					"plugin": "nodemailer-mandrill-transport",
+					"config": {
+						"auth": {"apiKey": "kNjbd7IINJy5bEMf19sf2A"}
+					}
+				},
+				"x-transport": {
+					"plugin": "nodemailer-sendmail-transport",
+					"config": {
+						"x-path": "",
+						"x-args": ""
+					}
+				},
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"text": "uuu"
+				}
+			}]
+		},
+		"sharklasers-template": {
+			"expect": "ok",
+			"only": true,
+			"tasks": [{
+
+				"task": "mail",
+				"transport": {
+					"plugin": "nodemailer-mandrill-transport",
+					"config": {
+						"auth": {"apiKey": "kNjbd7IINJy5bEMf19sf2A"}
+					}
+				},
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"template": "./test/001-email-task"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"login-and-send": {
+			"expect": "ok",
+			"skip": true,
+			"tasks": [{
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}, {
+				"task": "mail",
+				"transport": {
+					"host": "localhost",
+					"port": 50425,
+					"auth": {
+						"user": "testuser",
+						"pass": "testpass"
+					},
+					"ignoreTLS": true
+
+				},
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}]
+		},
+		"envelopes": {
+			"expect": "ok",
+			"tasks": [{
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}, {
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"subject": "test",
+					"text": "uuu"
+				},
+				"recipients": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"]
+			}]
+		},
+		"missing-from": {
+			"expect": "fail",
+			"description": "missing from field",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}]
+		},
+		"missing-to": {
+			"expect": "fail",
+			"description": "missing to field",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"from": "from@valid.sender",
+					"subject": "test",
+					"text": "uuu"
+				}
+			}]
+		},
+		"missing-subject": {
+			"expect": "fail",
+			"description": "missing subject field",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"text": "uuu"
+				}
+			}]
+		},
+		"missing-text-or-html": {
+			"expect": "fail",
+			"description": "missing text or html",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test"
+				}
+			}]
+		},
+
+		"wrong-transport-config": {
+			"expect": "fail",
+			"description": "this task must fail because of transport as string",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}]
+		},
+		"content": {
+			"expect": "fail",
+			"description": "this task must fail because of transport as string",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"subject": "test",
+					"text": "uuu"
+				}
+			}]
+		}
+	}
+}

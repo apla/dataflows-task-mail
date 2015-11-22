@@ -1,0 +1,40 @@
+{
+  "name": "dataflows-task-mail",
+  "version": "1.0.0",
+  "description": "email task for dataflows",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apla/dataflows-task-mail.git"
+  },
+  "keywords": [
+    "dataflows",
+    "dataflo.ws",
+    "email",
+    "mail"
+  ],
+  "peerDependencies": {
+    "email-templates": "^2.0.1",
+    "nodemailer": "^1.10.0",
+    "dataflo.ws": "^0.71.0"
+  },
+  "devDependencies": {
+    "email-templates": "^2.0.1",
+    "nodemailer": "^1.10.0",
+    "mocha": "*",
+    "codecov.io": "*",
+    "istanbul": "*",
+    "handlebars": "*",
+    "nodemailer-mandrill-transport": "^0.3.0",
+    "nodemailer-sendmail-transport": "^1.0.0"
+  },
+  "scripts": {
+    "test": "NODE_PATH=..:$NODE_PATH /usr/bin/env istanbul cover _mocha -- -R list -t 30000 && cat ./coverage/coverage.json | codecov"
+  },
+  "author": "apla",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apla/dataflows-task-mail/issues"
+  },
+  "homepage": "https://github.com/apla/dataflows-task-mail#readme"
+}
