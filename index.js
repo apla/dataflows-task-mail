@@ -150,7 +150,28 @@ mailTask.prototype.run = function (args) {
 			example.net
 			example.org
 		*/
-		if (email.to.match (/(?:\@example\.(?:com|net|org)|\.(?:test|example|invalid|localhost))$/)) {
+
+		/* RFC 6761
+
+		Application software SHOULD NOT recognize test names as special,
+		and SHOULD use test names as they would other domain names.
+
+		Application software MAY recognize localhost names as special, or
+		MAY pass them to name resolution APIs as they would for other
+		domain names.
+
+		Application software MAY recognize "invalid" names as special or
+		MAY pass them to name resolution APIs as they would for other
+		domain names.
+
+		Application software SHOULD NOT recognize example names as
+		special and SHOULD use example names as they would other domain
+		names.
+
+		*/
+
+		// TODO: check for unicode alphanumeric like IDNA without Punycode
+		if (email.to.match (/\@\w[\w\.]+(?:invalid|localhost)$/)) {
 
 			sentCount ++;
 
