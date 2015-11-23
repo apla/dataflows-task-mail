@@ -1,6 +1,6 @@
 {
   "name": "dataflows-task-mail",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "email task for dataflows",
   "main": "index.js",
   "repository": {
@@ -16,15 +16,15 @@
   "peerDependencies": {
     "email-templates": "^2.0.1",
     "nodemailer": "1.x",
-    "dataflo.ws": "> 0.72.0",
-    "conf-fu": "> 0.5.15",
-    "commop": "> 1.2.0"
+    "dataflo.ws": ">=0.72.0",
+    "conf-fu": ">=0.5.15",
+    "commop": ">=1.2.0"
   },
   "devDependencies": {
     "email-templates": "^2.0.1",
     "nodemailer": "1.x",
-    "dataflo.ws": "> 0.72.0",
-    "conf-fu": "> 0.5.15",
+    "dataflo.ws": ">=0.72.0",
+    "conf-fu": ">=0.5.15",
     "mocha": "*",
     "codecov.io": "*",
     "istanbul": "*",
