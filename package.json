@@ -16,7 +16,9 @@
   "peerDependencies": {
     "email-templates": "^2.0.1",
     "nodemailer": "^1.10.0",
-    "dataflo.ws": "^0.72.0"
+    "dataflo.ws": "^0.72.0",
+    "conf-fu": "^0.5.12",
+    "commop": "^1.2.0"
   },
   "devDependencies": {
     "email-templates": "^2.0.1",
