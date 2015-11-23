@@ -66,21 +66,8 @@ var
 
 var
 	mailConfig,
-	templatesDir = 'templates/email';
+	templatesDir;
 
-if ('project' in global) {
-	if (project.config && project.config.service && project.config.service.mail)
-		mailConfig = project.config.service.mail;
-}
-
-if ('project' in dataflows) {
-	if (dataflows.config && dataflows.config.service && dataflows.config.service.mail)
-		mailConfig = dataflows.config.service.mail;
-}
-
-function resolveTemplate (transConf) {
-
-}
 
 var mailTask = module.exports = function (config) {
 
@@ -89,6 +76,25 @@ var mailTask = module.exports = function (config) {
 };
 
 util.inherits (mailTask, task);
+
+mailTask.checkConfig = function () {
+
+	var config;
+
+	if ('project' in global && project.config && project.config.service && project.config.service.mail) {
+		config = project.config;
+	} else if ('config' in dataflows && dataflows.config && dataflows.config.service && dataflows.config.service.mail) {
+		config = dataflows.config;
+	} else {
+		return;
+	}
+
+	mailConfig = config.service.mail;
+	templatesDir = mailConfig.templatesDir || 'share/presentation/email';
+
+}
+
+mailTask.checkConfig ();
 
 mailTask.prototype.run = function (args) {
 
@@ -172,7 +178,7 @@ mailTask.prototype.run = function (args) {
 
 		if (email.to.constructor !== Array) email.to = [email.to];
 
-		email.to.forEach (function (recipient) {
+		email.to = email.to.filter (function (recipient) {
 			// TODO: check for unicode alphanumeric like IDNA without Punycode
 			if (recipient.match (/\@\w[\w\.]+(?:invalid|localhost)$/)) {
 				return false;
@@ -288,7 +294,7 @@ mailTask.prototype.resolveTransport = function (transConf) {
 			return this.failed ("you must supply transport configuration via dataflows.config");
 		}
 
-		return mailConfig.transport[transConf];
+		return mailConfig.transports[transConf];
 	}
 
 	return transConf;
@@ -307,14 +313,14 @@ mailTask.prototype.render = function (mail, done) {
 		return done ();
 	}
 
-	if (!mail.data.template) {
-		return done ("'template' not defined for email message");
-	}
-
 	var templatePath;
 	// local path
 	if (mail.data.template.match (/^\.*\//)) {
 		templatePath = path.resolve (mail.data.template);
+	} else if (!templatesDir) {
+		return done ("You need to define template dir to use template names");
+	} else {
+		templatePath = path.join (templatesDir, mail.data.template);
 	}
 
 	var emailTemplate = new EmailTemplate (templatePath);

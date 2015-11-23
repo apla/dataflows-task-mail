@@ -43,19 +43,7 @@
 			"expect": "ok",
 			"tasks": [{
 				"task": "mail",
-				"transport": {
-					"plugin": "nodemailer-mandrill-transport",
-					"config": {
-						"auth": {"apiKey": "{$apiKeys.mandrill}"}
-					}
-				},
-				"x-transport": {
-					"plugin": "nodemailer-sendmail-transport",
-					"config": {
-						"x-path": "",
-						"x-args": ""
-					}
-				},
+				"transport": "test",
 				"fields": {
 					"from": "from@valid.sender",
 					"to": "mdoxfzzy@sharklasers.com",
@@ -74,11 +62,93 @@
 						"auth": {"apiKey": "{$apiKeys.mandrill}"}
 					}
 				},
+				"x-transport": {
+					"plugin": "nodemailer-sendmail-transport",
+					"config": {
+						"path": "sendmail",
+						"args": []
+					}
+				},
 				"fields": {
 					"from": "from@valid.sender",
 					"to": "mdoxfzzy@sharklasers.com",
 					"subject": "Mail task for dataflows is working!",
 					"template": "./test/001-email-task"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"sharklasers-template-df": {
+			"expect": "ok",
+			"skip": true,
+			"tasks": [{
+				"task": "mail",
+				"transport": "mandrill",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"template": "001-email-task"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"sharklasers-template-fail": {
+			"expect": "fail",
+			"tasks": [{
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"template": "./test/nothing"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"sharklasers-templateDir-fail": {
+			"expect": "fail",
+			"tasks": [{
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"template": "nothing"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"gmail-fail": {
+			"expect": "fail",
+			"tasks": [{
+				"task": "mail",
+				"transport": {
+					"service": "Gmail",
+					"auth": {
+						"user": "gmail.user@gmail.com",
+						"pass": "userpass"
+					}
+				},
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "mdoxfzzy@sharklasers.com",
+					"subject": "Mail task for dataflows is working!",
+					"template": "nothing"
 				},
 				"vars": {
 					"title": "Mail task for dataflows is working!",
@@ -125,7 +195,7 @@
 				"transport": "test",
 				"fields": {
 					"from": "from@valid.sender",
-					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"],
+					"to": ["to1@valid.recipient", "to2@valid.recipient", "to@site.invalid"],
 					"subject": "test",
 					"text": "uuu"
 				}
@@ -137,7 +207,16 @@
 					"subject": "test",
 					"text": "uuu"
 				},
-				"recipients": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"]
+				"recipients": ["to1@valid.recipient", "to2@valid.recipient", "to@site.invalid"]
+			}, {
+				"task": "mail",
+				"transport": "test",
+				"fields": {
+					"from": "from@valid.sender",
+					"subject": "test",
+					"text": "uuu"
+				},
+				"recipients": ["to@site.invalid"]
 			}]
 		},
 		"missing-from": {
@@ -151,6 +230,19 @@
 					"subject": "test",
 					"text": "uuu"
 				}
+			}]
+		},
+		"missing-from": {
+			"expect": "fail",
+			"description": "missing from field",
+			"tasks": [{
+				"task": "mail",
+				"transport": "smtp",
+				"fields": {
+					"subject": "test",
+					"text": "uuu"
+				},
+				"recipients": ["to1@valid.recipient", "to2@valid.recipient", "to@invalid.recipient"]
 			}]
 		},
 		"missing-to": {

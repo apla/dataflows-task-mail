@@ -1,6 +1,10 @@
 var testCommon = require ("dataflo.ws/test/common");
 testCommon.injectMain ();
 
+var dataflows = require ('dataflo.ws');
+
+var task = require ('../');
+
 var baseName = testCommon.baseName (__filename);
 
 var testData = testCommon.initTests (__dirname, baseName);
@@ -59,6 +63,45 @@ describe (baseName + " mail", testCommon.runTests.bind (descriptor, testData, {
 		mandrill: process.env.MANDRILL_API_KEY
 	}
 }, verbose));
+
+var testData2 = {
+	templates: {task: {}},
+	tests: {"sharklasers-dataflows": Object.create(testData.tests["sharklasers-template-df"])}
+}
+
+testData2.tests["sharklasers-dataflows"].skip = false;
+//testData2.tests["sharklasers-dataflows"].only = true;
+
+var descriptor2 = {
+	before: function () {
+		// dataflows config will be defined before task launch
+
+		dataflows.config = {service: {mail: {
+			transports: {
+				mandrill: {
+					"plugin": "nodemailer-mandrill-transport",
+					"config": {
+						"auth": {"apiKey": process.env.MANDRILL_API_KEY}
+					}
+				}
+			},
+			templatesDir: "./test"
+		}}};
+
+		task.checkConfig ();
+
+		global.project = {config: dataflows.config};
+
+		task.checkConfig ();
+	}
+}
+
+describe (baseName + " mail with dataflows.config", testCommon.runTests.bind (descriptor2, testData2, {
+	apiKeys: {
+		mandrill: process.env.MANDRILL_API_KEY
+	}
+}, verbose));
+
 
 return;
 
