@@ -16,11 +16,12 @@
   "peerDependencies": {
     "email-templates": "^2.0.1",
     "nodemailer": "^1.10.0",
-    "dataflo.ws": "^0.71.0"
+    "dataflo.ws": "^0.72.0"
   },
   "devDependencies": {
     "email-templates": "^2.0.1",
     "nodemailer": "^1.10.0",
+    "dataflo.ws": "^0.72.0",
     "mocha": "*",
     "codecov.io": "*",
     "istanbul": "*",
