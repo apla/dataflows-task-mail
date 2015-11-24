@@ -197,9 +197,11 @@ mailTask.prototype.run = function (args) {
 			return;
 		}
 
+		email.to = email.to.join (', ');
+
 		this.transporter.sendMail (email, function (error, response) {
 
-			// console.log (error, response);
+			// console.log (args.transport, transport, email, error, response);
 
 			if (error)
 				return this.failed (error);

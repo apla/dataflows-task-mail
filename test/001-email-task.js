@@ -84,13 +84,16 @@ var descriptor2 = {
 						"auth": {"apiKey": process.env.MANDRILL_API_KEY}
 					}
 				}
-			},
-			templatesDir: "./test"
+			}
 		}}};
 
 		task.checkConfig ();
 
 		global.project = {config: dataflows.config};
+
+		task.checkConfig ();
+
+		dataflows.config.service.mail.templatesDir = "./test";
 
 		task.checkConfig ();
 	}

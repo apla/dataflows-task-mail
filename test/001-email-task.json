@@ -71,7 +71,29 @@
 				},
 				"fields": {
 					"from": "from@valid.sender",
-					"to": "mdoxfzzy@sharklasers.com",
+					"to": ["doxfzzy@sharklasers.com", "email@domain.invalid"],
+					"subject": "Mail task for dataflows is working!",
+					"template": "./test/001-email-task"
+				},
+				"vars": {
+					"title": "Mail task for dataflows is working!",
+					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
+				}
+			}]
+		},
+		"sharklasers-template-skip-recipient": {
+			"expect": "ok",
+			"tasks": [{
+				"task": "mail",
+				"transport": {
+					"plugin": "nodemailer-mandrill-transport",
+					"config": {
+						"auth": {"apiKey": "{$apiKeys.mandrill}"}
+					}
+				},
+				"fields": {
+					"from": "from@valid.sender",
+					"to": "email@domain.invalid",
 					"subject": "Mail task for dataflows is working!",
 					"template": "./test/001-email-task"
 				},
