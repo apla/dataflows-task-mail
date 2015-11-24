@@ -5,7 +5,7 @@ var dfMail = require ('dataflows-task-mail');
 
 describe ("002-task-alone", function () {
 
-	it.skip ("sending email", function (done) {
+	it ("sending email", function (done) {
 		var task = new dfMail ({});
 
 		task.run ({
