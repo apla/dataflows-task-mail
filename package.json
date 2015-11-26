@@ -29,6 +29,7 @@
     "codecov.io": "*",
     "istanbul": "*",
     "handlebars": "*",
+    "guerrilla-api": "*",
     "nodemailer-mandrill-transport": "^0.3.0",
     "nodemailer-sendmail-transport": "^1.0.0"
   },

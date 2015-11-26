@@ -58,10 +58,13 @@ var descriptor = {
 	}
 };
 
+var timeToken = 0 + Date.now();
+
 describe (baseName + " mail", testCommon.runTests.bind (descriptor, testData, {
 	apiKeys: {
 		mandrill: process.env.MANDRILL_API_KEY
-	}
+	},
+	messageToken: timeToken
 }, verbose));
 
 var testData2 = {
@@ -96,13 +99,45 @@ var descriptor2 = {
 		dataflows.config.service.mail.templatesDir = "./test";
 
 		task.checkConfig ();
-	}
+	},
+//	after: function (done) {
+//
+//
+//	}
 }
+
+require.main.exports.guerrillaCheck = function (token, skip, cb) {
+	var Guerrilla = require ('guerrilla-api');
+
+	if (skip) return cb (null, true);
+
+	guerrillaApi = new Guerrilla('127.0.0.1', 'automated-test-agent');
+
+	guerrillaApi.setEmailAddress('mdoxfzzy', function(err, address) {
+
+		guerrillaApi.getEmailAddress(function(err, email) {
+
+			guerrillaApi.checkEmail(function(err, emails) {
+
+				var testEmails = emails.filter (function (msg) {
+					return msg.mail_subject.match (token);
+				});
+				console.log ('EMAILS: %s, %d/%d', token, testEmails.length, emails.length, testEmails) //, emails)
+				if (testEmails.length)
+					cb (null, testEmails[0]);
+				else
+					cb (true);
+			});
+		});
+	})
+}
+
 
 describe (baseName + " mail with dataflows.config", testCommon.runTests.bind (descriptor2, testData2, {
 	apiKeys: {
 		mandrill: process.env.MANDRILL_API_KEY
-	}
+	},
+	messageToken: timeToken
 }, verbose));
 
 

@@ -191,7 +191,7 @@ mailTask.prototype.run = function (args) {
 			sentCount ++;
 
 			if (sentCount === emails.length) {
-				this.completed ();
+				this.completed (email);
 			}
 
 			return;
@@ -211,7 +211,7 @@ mailTask.prototype.run = function (args) {
 			sentCount ++;
 
 			if (sentCount === emails.length) {
-				this.completed ();
+				this.completed (email);
 			}
 		}.bind (this));
 

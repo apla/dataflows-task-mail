@@ -111,14 +111,22 @@
 				"transport": "mandrill",
 				"fields": {
 					"from": "from@valid.sender",
-					"to": "mdoxfzzy@sharklasers.com",
-					"subject": "Mail task for dataflows is working!",
+					"to": "mdoxfzzy@guerrillamailblock.com",
+					"subject": "Mail task for dataflows is working! {$messageToken}",
 					"template": "001-email-task"
 				},
 				"vars": {
 					"title": "Mail task for dataflows is working!",
 					"msg": "You can check additional details at https://github.com/apla/dataflows-task-mail"
-				}
+				},
+				"$set": "emailSent"
+			}, {
+				"$errback": "guerrillaCheck",
+				"$args": ["{$messageToken}", "skip"],
+				"retries": 2,
+				"timeout": 5000,
+				"after": "{$emailSent}",
+				"important": true
 			}]
 		},
 		"sharklasers-template-fail": {
